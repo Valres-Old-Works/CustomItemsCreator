@@ -1,0 +1,28 @@
+emerald_pickaxe:
+  type: "pickaxe"
+  name: "Pioche en emeraude"
+  texture: "emerald_pickaxe"
+  efficiency: 10
+  damage: 6
+  durability: 1500
+emerald_axe:
+  type: "axe"
+  name: "Hache en emeraude"
+  texture: "emerald_axe"
+  efficiency: 10
+  damage: 8
+  durability: 1500
+emerald_hoe:
+  type: "hoe"
+  name: "Houe en emeraude"
+  texture: "emerald_hoe"
+  efficiency: 10
+  damage: 5
+  durability: 1500
+emerald_shovel:
+  type: "shovel"
+  name: "Pelle en emeraude"
+  texture: "emerald_shovel"
+  efficiency: 10
+  damage: 4
+  durability: 1500
