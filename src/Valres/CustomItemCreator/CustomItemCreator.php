@@ -49,8 +49,7 @@ class CustomItemCreator extends PluginBase
     const HOE = "hoe";
     const PICKAXE = "pickaxe";
     const SHOVEL = "shovel";
-
-
+    
     use SingletonTrait;
 
     protected function onEnable(): void {
