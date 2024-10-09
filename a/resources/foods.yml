@@ -1,0 +1,8 @@
+emerald_apple:
+  name: "Pomme en emeraude"
+  texture: "emerald_apple"
+  food: 5
+  saturation: 3
+  effects:
+    - "speed:10:1"
+    - "regeneration:15:1"
