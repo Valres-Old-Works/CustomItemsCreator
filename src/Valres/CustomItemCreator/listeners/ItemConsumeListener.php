@@ -37,20 +37,23 @@ final class ItemConsumeListener implements Listener
 {
     public function onEvent(PlayerItemConsumeEvent $event): void {
         $player = $event->getPlayer();
-        $item = $event->getItem();
+        $item   = $event->getItem();
 
-        if(!$item instanceof CustomFood) return;
+        if (!$item instanceof CustomFood) {
+            return;
+        }
+
         $this->addEffects($player, $item);
     }
 
     public function addEffects(Player $player, Item $customFood): void {
-        $identifier = StringToItemParser::getInstance()->lookupAliases($customFood)[0];
+        $identifier  = StringToItemParser::getInstance()->lookupAliases($customFood)[0];
         $foodEffects = FoodEffectsManager::getInstance();
 
-        if(array_key_exists($identifier, $foodEffects->getEffects())){
+        if (array_key_exists($identifier, $foodEffects->getEffects())) {
             $effects = $foodEffects->getEffects()[$identifier];
 
-            foreach($effects as $effectData){
+            foreach ($effects as $effectData) {
                 [$effectName, $time, $amplifier] = explode(":", $effectData);
                 $player->getEffects()->add(new EffectInstance(StringToEffectParser::getInstance()->parse($effectName), intval($time * 20), intval($amplifier) - 1));
             }

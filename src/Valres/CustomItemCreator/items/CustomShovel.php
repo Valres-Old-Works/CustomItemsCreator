@@ -44,8 +44,8 @@ final class CustomShovel extends Shovel implements ItemComponents
         getComponents as _getComponents;
     }
 
-    protected int $damage;
-    protected int $durability;
+    protected int $shovelDamage;
+    protected int $shovelDurability;
     protected int $efficiency;
 
     public function __construct(string $name, string $texture, int $efficiency, int $damage, int $durability) {
@@ -55,8 +55,8 @@ final class CustomShovel extends Shovel implements ItemComponents
             ToolTier::DIAMOND
         );
         $this->efficiency = $efficiency;
-        $this->damage = $damage;
-        $this->durability = $durability;
+        $this->shovelDamage = $damage;
+        $this->shovelDurability = $durability;
 
         $this->initComponent($texture, new CII(CII::CATEGORY_EQUIPMENT, CII::GROUP_SHOVEL));
         $this->addComponent(new HandEquippedComponent());
@@ -65,11 +65,11 @@ final class CustomShovel extends Shovel implements ItemComponents
     }
 
     public function getAttackPoints(): int {
-        return $this->damage;
+        return $this->shovelDamage;
     }
 
     public function getMaxDurability(): int {
-        return $this->durability;
+        return $this->shovelDurability;
     }
 
     public function getComponents() : CompoundTag {

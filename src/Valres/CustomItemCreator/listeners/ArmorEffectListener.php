@@ -44,21 +44,21 @@ final class ArmorEffectListener implements Listener
     public function onEvent(PlayerJoinEvent $event): void {
         $player = $event->getPlayer();
 
-        foreach($player->getArmorInventory()->getContents() as $targetItem){
-            if(!$targetItem instanceof Armor){
-                if($targetItem->equals(VanillaItems::AIR())){
+        foreach ($player->getArmorInventory()->getContents() as $targetItem) {
+            if (!$targetItem instanceof Armor) {
+                if ($targetItem->equals(VanillaItems::AIR())) {
                     $this->addEffects($player, VanillaItems::AIR(), $targetItem);
                 }
                 return;
             }
 
-            $slot = $targetItem->getArmorSlot();
+            $slot       = $targetItem->getArmorSlot();
             $sourceItem = $player->getArmorInventory()->getItem($slot);
             $this->addEffects($player, $sourceItem, $targetItem);
         }
 
         $player->getArmorInventory()->getListeners()->add(new CallbackInventoryListener(function(Inventory $inventory, int $slot, Item $oldItem): void {
-            if($inventory instanceof ArmorInventory){
+            if ($inventory instanceof ArmorInventory) {
                 $targetItem = $inventory->getItem($slot);
                 $this->addEffects($inventory->getHolder(), $oldItem, $targetItem);
             }
@@ -66,23 +66,23 @@ final class ArmorEffectListener implements Listener
     }
 
     private function addEffects(Player $player, Item $sourceItem, Item $targetItem): void {
-        $identifier = StringToItemParser::getInstance()->lookupAliases($sourceItem)[0];
+        $identifier   = StringToItemParser::getInstance()->lookupAliases($sourceItem)[0];
         $armorEffects = ArmorEffectsManager::getInstance();
 
-        if(array_key_exists($identifier, $armorEffects->getEffects())){
+        if (array_key_exists($identifier, $armorEffects->getEffects())) {
             $effects = $armorEffects->getEffects()[$identifier];
 
-            foreach($effects as $effectData){
+            foreach ($effects as $effectData) {
                 [$effectName, $amplifier] = explode(":", $effectData);
                 $player->getEffects()->remove(StringToEffectParser::getInstance()->parse($effectName));
             }
         }
 
         $identifier_ = StringToItemParser::getInstance()->lookupAliases($targetItem)[0];
-        if(array_key_exists($identifier_, $armorEffects->getEffects())){
+        if (array_key_exists($identifier_, $armorEffects->getEffects())) {
             $effects = $armorEffects->getEffects()[$identifier_];
 
-            foreach($effects as $effectData){
+            foreach ($effects as $effectData) {
                 [$effectName, $amplifier] = explode(":", $effectData);
                 $effect = new EffectInstance(StringToEffectParser::getInstance()->parse($effectName), 2147483647, $amplifier - 1, false);
                 $player->getEffects()->add($effect);

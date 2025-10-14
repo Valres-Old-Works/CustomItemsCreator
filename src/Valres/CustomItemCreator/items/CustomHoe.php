@@ -44,8 +44,8 @@ final class CustomHoe extends Hoe implements ItemComponents
         getComponents as _getComponents;
     }
 
-    protected int $damage;
-    protected int $durability;
+    protected int $hoeDamage;
+    protected int $hoeDurability;
     protected int $efficiency;
 
     public function __construct(string $name, string $texture, int $efficiency, int $damage, int $durability) {
@@ -55,8 +55,8 @@ final class CustomHoe extends Hoe implements ItemComponents
             ToolTier::DIAMOND
         );
         $this->efficiency = $efficiency;
-        $this->damage = $damage;
-        $this->durability = $durability;
+        $this->hoeDamage = $damage;
+        $this->hoeDurability = $durability;
 
         $this->initComponent($texture, new CII(CII::CATEGORY_EQUIPMENT, CII::GROUP_HOE));
         $this->addComponent(new HandEquippedComponent());
@@ -65,11 +65,11 @@ final class CustomHoe extends Hoe implements ItemComponents
     }
 
     public function getAttackPoints(): int {
-        return $this->damage;
+        return $this->hoeDamage;
     }
 
     public function getMaxDurability(): int {
-        return $this->durability;
+        return $this->hoeDurability;
     }
 
     public function getComponents() : CompoundTag {

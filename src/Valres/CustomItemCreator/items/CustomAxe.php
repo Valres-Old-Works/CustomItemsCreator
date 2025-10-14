@@ -43,8 +43,8 @@ final class CustomAxe extends Axe implements ItemComponents
         getComponents as _getComponents;
     }
 
-    protected int $damage;
-    protected int $durability;
+    protected int $axeDamage;
+    protected int $axeDurability;
     protected int $efficiency;
 
     public function __construct(string $name, string $texture, int $efficiency, int $damage, int $durability) {
@@ -54,8 +54,8 @@ final class CustomAxe extends Axe implements ItemComponents
             ToolTier::DIAMOND
         );
         $this->efficiency = $efficiency;
-        $this->damage = $damage;
-        $this->durability = $durability;
+        $this->axeDamage = $damage;
+        $this->axeDurability = $durability;
 
         $this->initComponent($texture, new CII(CII::CATEGORY_EQUIPMENT, CII::GROUP_AXE));
         $this->addComponent(new HandEquippedComponent());
@@ -64,11 +64,11 @@ final class CustomAxe extends Axe implements ItemComponents
     }
 
     public function getAttackPoints(): int {
-        return $this->damage;
+        return $this->axeDamage;
     }
 
     public function getMaxDurability(): int {
-        return $this->durability;
+        return $this->axeDurability;
     }
 
     public function getComponents() : CompoundTag {

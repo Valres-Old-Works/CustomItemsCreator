@@ -35,6 +35,7 @@ use Valres\CustomItemCreator\items\CustomItem;
 use Valres\CustomItemCreator\items\CustomPickaxe;
 use Valres\CustomItemCreator\items\CustomShovel;
 use Valres\CustomItemCreator\items\CustomSword;
+use Valres\CustomItemCreator\libs\item\CreativeInventoryInfo as CII;
 use Valres\CustomItemCreator\libs\item\CustomiesItemFactory;
 use Valres\CustomItemCreator\listeners\ArmorEffectListener;
 use Valres\CustomItemCreator\listeners\CustomiesListener;
@@ -53,21 +54,28 @@ class CustomItemCreator extends PluginBase
     use SingletonTrait;
 
     protected function onEnable(): void {
-        $filesManager = new FilesManager();
-        $filesManager->load();
-
         $this->getServer()->getPluginManager()->registerEvents(new CustomiesListener(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new ArmorEffectListener(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new ItemConsumeListener(), $this);
+    }
 
-        foreach($filesManager->getSwordData()->getAll() as $identifier => $data){
+    protected function onLoad(): void {
+        self::setInstance($this);
+
+        $filesManager = new FilesManager();
+        $filesManager->load();
+
+        foreach ($filesManager->getSwordData()->getAll() as $identifier => $data) {
             CustomiesItemFactory::getInstance()->registerItem(new CustomSword(
                 $data["name"],
                 $data["texture"],
                 $data["damage"],
                 $data["durability"]
-            ), "minecraft:" . $identifier);
+            ), "minecraft:" . $identifier, new CII(CII::CATEGORY_EQUIPMENT, CII::GROUP_SWORD));
         }
+
+
+        CustomiesItemFactory::getInstance()->registerItem(new CustomSword("épée lourd", "diamond_sword", 2, 1000), "minecraft:sword_lourd");
 
         foreach($filesManager->getArmorData()->getAll() as $identifier => $data){
             CustomiesItemFactory::getInstance()->registerItem(new CustomArmor(
@@ -79,7 +87,12 @@ class CustomItemCreator extends PluginBase
                     "leggings" => ArmorInventory::SLOT_LEGS,
                     "boots" => ArmorInventory::SLOT_FEET
                 })
-            ), "minecraft:" . $identifier);
+            ), "minecraft:" . $identifier, new CII(CII::CATEGORY_EQUIPMENT, match($data["slot"]){
+                "helmet" => CII::GROUP_HELMET,
+                "chestplate" => CII::GROUP_CHESTPLATE,
+                "leggings" => CII::GROUP_LEGGINGS,
+                "boots" => CII::GROUP_BOOTS,
+            }));
 
             if(isset($data["effects"])){
                 ArmorEffectsManager::getInstance()->register($identifier, $data["effects"]);
@@ -95,7 +108,7 @@ class CustomItemCreator extends PluginBase
                         $data["efficiency"],
                         $data["damage"],
                         $data["durability"]
-                    ), "minecraft:" . $identifier);
+                    ), "minecraft:" . $identifier, new CII(CII::CATEGORY_EQUIPMENT, CII::GROUP_PICKAXE));
                     break;
                 case self::AXE:
                     CustomiesItemFactory::getInstance()->registerItem(new CustomAxe(
@@ -104,7 +117,7 @@ class CustomItemCreator extends PluginBase
                         $data["efficiency"],
                         $data["damage"],
                         $data["durability"]
-                    ), "minecraft:" . $identifier);
+                    ), "minecraft:" . $identifier, new CII(CII::CATEGORY_EQUIPMENT, CII::GROUP_AXE));
                     break;
                 case self::HOE:
                     CustomiesItemFactory::getInstance()->registerItem(new CustomHoe(
@@ -113,7 +126,7 @@ class CustomItemCreator extends PluginBase
                         $data["efficiency"],
                         $data["damage"],
                         $data["durability"]
-                    ), "minecraft:" . $identifier);
+                    ), "minecraft:" . $identifier, new CII(CII::CATEGORY_EQUIPMENT, CII::GROUP_HOE));
                     break;
                 case self::SHOVEL:
                     CustomiesItemFactory::getInstance()->registerItem(new CustomShovel(
@@ -122,7 +135,7 @@ class CustomItemCreator extends PluginBase
                         $data["efficiency"],
                         $data["damage"],
                         $data["durability"]
-                    ), "minecraft:" . $identifier);
+                    ), "minecraft:" . $identifier, new CII(CII::CATEGORY_EQUIPMENT, CII::GROUP_SHOVEL));
                     break;
             }
         }
@@ -130,8 +143,9 @@ class CustomItemCreator extends PluginBase
         foreach($filesManager->getItemsData()->getAll() as $identifier => $data){
             CustomiesItemFactory::getInstance()->registerItem(new CustomItem(
                 $data["name"],
-                $data["texture"]
-            ), "minecraft:" . $identifier);
+                $data["texture"],
+                $data["handEquipped"]
+            ), "minecraft:" . $identifier, new CII(CII::CATEGORY_ITEMS));
         }
 
         foreach($filesManager->getFoodsData()->getAll() as $identifier => $data){
@@ -140,15 +154,11 @@ class CustomItemCreator extends PluginBase
                 $data["texture"],
                 $data["food"],
                 $data["saturation"]
-            ), "minecraft:" . $identifier);
+            ), "minecraft:" . $identifier, new CII(CII::CATEGORY_NATURE));
 
             if(isset($data["effects"])){
                 FoodEffectsManager::getInstance()->register($identifier, $data["effects"]);
             }
         }
-    }
-
-    protected function onLoad(): void {
-        self::setInstance($this);
     }
 }

@@ -26,6 +26,7 @@ namespace Valres\CustomItemCreator\items;
 use pocketmine\item\Item;
 use pocketmine\item\ItemIdentifier;
 use pocketmine\item\ItemTypeIds;
+use Valres\CustomItemCreator\libs\item\component\HandEquippedComponent;
 use Valres\CustomItemCreator\libs\item\CreativeInventoryInfo as CII;
 use Valres\CustomItemCreator\libs\item\ItemComponents;
 use Valres\CustomItemCreator\libs\item\ItemComponentsTrait;
@@ -34,12 +35,13 @@ final class CustomItem extends Item implements ItemComponents
 {
     use ItemComponentsTrait;
 
-    public function __construct(string $name, string $texture) {
+    public function __construct(string $name, string $texture, bool $handEquipped) {
         parent::__construct(
             new ItemIdentifier(ItemTypeIds::newId()),
             $name
         );
 
         $this->initComponent($texture, new CII(CII::CATEGORY_ITEMS));
+        $this->addComponent(new HandEquippedComponent($handEquipped));
     }
 }

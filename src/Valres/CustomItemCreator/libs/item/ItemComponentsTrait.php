@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Valres\CustomItemCreator\libs\item;
 
 use Valres\CustomItemCreator\libs\item\component\AllowOffHandComponent;
-use Valres\CustomItemCreator\libs\item\component\ArmorComponent;
 use Valres\CustomItemCreator\libs\item\component\CanDestroyInCreativeComponent;
 use Valres\CustomItemCreator\libs\item\component\CooldownComponent;
 use Valres\CustomItemCreator\libs\item\component\CreativeCategoryComponent;
 use Valres\CustomItemCreator\libs\item\component\CreativeGroupComponent;
+use Valres\CustomItemCreator\libs\item\component\DamageComponent;
 use Valres\CustomItemCreator\libs\item\component\DisplayNameComponent;
 use Valres\CustomItemCreator\libs\item\component\DurabilityComponent;
 use Valres\CustomItemCreator\libs\item\component\FoodComponent;
@@ -18,7 +18,6 @@ use Valres\CustomItemCreator\libs\item\component\IconComponent;
 use Valres\CustomItemCreator\libs\item\component\ItemComponent;
 use Valres\CustomItemCreator\libs\item\component\MaxStackSizeComponent;
 use Valres\CustomItemCreator\libs\item\component\ProjectileComponent;
-use Valres\CustomItemCreator\libs\item\component\RenderOffsetsComponent;
 use Valres\CustomItemCreator\libs\item\component\ThrowableComponent;
 use Valres\CustomItemCreator\libs\item\component\UseAnimationComponent;
 use Valres\CustomItemCreator\libs\item\component\UseDurationComponent;
@@ -30,6 +29,8 @@ use pocketmine\item\Armor;
 use pocketmine\item\Durable;
 use pocketmine\item\Food;
 use pocketmine\item\ProjectileItem;
+use pocketmine\item\Sword;
+use pocketmine\item\Tool;
 use pocketmine\nbt\tag\CompoundTag;
 use RuntimeException;
 
@@ -84,7 +85,6 @@ trait ItemComponentsTrait {
 				ArmorInventory::SLOT_FEET => WearableComponent::SLOT_ARMOR_FEET,
 				default => WearableComponent::SLOT_ARMOR
 			};
-			$this->addComponent(new ArmorComponent($this->getDefensePoints()));
 			$this->addComponent(new WearableComponent($slot, $this->getDefensePoints()));
 		}
 
@@ -101,7 +101,7 @@ trait ItemComponentsTrait {
 		}
 
 		if($this instanceof ProjectileItem) {
-			$this->addComponent(new ProjectileComponent("projectile"));
+			$this->addComponent(new ProjectileComponent(1.25, "projectile"));
 			$this->addComponent(new ThrowableComponent(true));
 		}
 
@@ -112,17 +112,17 @@ trait ItemComponentsTrait {
 		if($this->getFuelTime() > 0) {
 			$this->addComponent(new FuelComponent($this->getFuelTime()));
 		}
-	}
 
-	/**
-	 * When a custom item has a texture that is not 16x16, the item will scale when held in a hand based on the size of
-	 * the texture. This method adds the minecraft:render_offsets component with the correct data for the provided width
-	 * and height of a texture to make the item scale correctly. An optional bool for hand equipped can be used if the
-	 * item is something like a tool or weapon.
-	 */
-	protected function setupRenderOffsets(int $width, int $height, bool $handEquipped = false): void {
-		$this->addComponent(new HandEquippedComponent($handEquipped));
-		$this->addComponent(new RenderOffsetsComponent($width, $height, $handEquipped));
+		if($this->getAttackPoints() > 0) {
+			$this->addComponent(new DamageComponent($this->getAttackPoints() - 1));
+		}
+
+		if($this instanceof Tool) {
+			$this->addComponent(new HandEquippedComponent());
+			if ($this instanceof Sword) {
+				$this->addComponent(new CanDestroyInCreativeComponent(false));
+			}
+		}
 	}
 
 	/**

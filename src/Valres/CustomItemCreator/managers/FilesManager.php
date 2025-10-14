@@ -34,7 +34,7 @@ class FilesManager
 
     public function load(): void {
         $files = ["swords.yml", "armors.yml", "tools.yml", "items.yml", "foods.yml"];
-        foreach($files as $file){
+        foreach ($files as $file) {
             $this->getPlugin()->saveResource($file);
         }
     }

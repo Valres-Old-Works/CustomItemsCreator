@@ -43,8 +43,8 @@ final class CustomPickaxe extends Pickaxe implements ItemComponents
         getComponents as _getComponents;
     }
 
-    protected int $damage;
-    protected int $durability;
+    protected int $pickaxeDamage;
+    protected int $pickaxeDurability;
     protected int $efficiency;
 
     public function __construct(string $name, string $texture, int $efficiency, int $damage, int $durability) {
@@ -54,8 +54,8 @@ final class CustomPickaxe extends Pickaxe implements ItemComponents
             ToolTier::DIAMOND
         );
         $this->efficiency = $efficiency;
-        $this->damage = $damage;
-        $this->durability = $durability;
+        $this->pickaxeDamage = $damage;
+        $this->pickaxeDurability = $durability;
 
         $this->initComponent($texture, new CII(CII::CATEGORY_EQUIPMENT, CII::GROUP_PICKAXE));
         $this->addComponent(new HandEquippedComponent());
@@ -64,11 +64,11 @@ final class CustomPickaxe extends Pickaxe implements ItemComponents
     }
 
     public function getAttackPoints(): int {
-        return $this->damage;
+        return $this->pickaxeDamage;
     }
 
     public function getMaxDurability(): int {
-        return $this->durability;
+        return $this->pickaxeDurability;
     }
 
     public function getComponents() : CompoundTag {

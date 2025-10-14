@@ -44,8 +44,8 @@ final class CustomSword extends Sword implements ItemComponents
         getComponents as _getComponents;
     }
 
-    protected int $damage;
-    protected int $durability;
+    protected int $swordDamage;
+    protected int $swordDurability;
 
     public function __construct(string $name, string $texture, int $damage, int $durability) {
         parent::__construct(
@@ -53,8 +53,8 @@ final class CustomSword extends Sword implements ItemComponents
             $name,
             ToolTier::DIAMOND
         );
-        $this->damage = $damage;
-        $this->durability = $durability;
+        $this->swordDamage = $damage;
+        $this->swordDurability = $durability;
 
         $this->initComponent($texture, new CII(CII::CATEGORY_EQUIPMENT, CII::GROUP_SWORD));
         $this->addComponent(new HandEquippedComponent());
@@ -63,11 +63,11 @@ final class CustomSword extends Sword implements ItemComponents
     }
 
     public function getAttackPoints(): int {
-        return $this->damage;
+        return $this->swordDamage;
     }
 
     public function getMaxDurability(): int {
-        return $this->durability;
+        return $this->swordDurability;
     }
 
     public function getComponents() : CompoundTag {
