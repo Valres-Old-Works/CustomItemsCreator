@@ -27,6 +27,7 @@ use pocketmine\item\Item;
 use pocketmine\item\ItemIdentifier;
 use pocketmine\item\ItemTypeIds;
 use Valres\CustomItemCreator\libs\item\component\HandEquippedComponent;
+use Valres\CustomItemCreator\libs\item\component\MaxStackSizeComponent;
 use Valres\CustomItemCreator\libs\item\CreativeInventoryInfo as CII;
 use Valres\CustomItemCreator\libs\item\ItemComponents;
 use Valres\CustomItemCreator\libs\item\ItemComponentsTrait;
@@ -35,13 +36,22 @@ final class CustomItem extends Item implements ItemComponents
 {
     use ItemComponentsTrait;
 
-    public function __construct(string $name, string $texture, bool $handEquipped) {
+    private int $maxStack;
+
+    public function __construct(string $name, string $texture, bool $handEquipped, int $maxStack) {
         parent::__construct(
             new ItemIdentifier(ItemTypeIds::newId()),
             $name
         );
 
+        $this->maxStack = $maxStack;
+
         $this->initComponent($texture, new CII(CII::CATEGORY_ITEMS));
         $this->addComponent(new HandEquippedComponent($handEquipped));
+        $this->addComponent(new MaxStackSizeComponent($this->getMaxStackSize()));
+    }
+
+    public function getMaxStackSize(): int {
+        return $this->maxStack;
     }
 }

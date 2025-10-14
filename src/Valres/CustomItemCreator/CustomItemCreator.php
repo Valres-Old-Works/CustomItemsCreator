@@ -144,7 +144,8 @@ class CustomItemCreator extends PluginBase
             CustomiesItemFactory::getInstance()->registerItem(new CustomItem(
                 $data["name"],
                 $data["texture"],
-                $data["handEquipped"]
+                $data["handEquipped"],
+                $data["maxStack"]
             ), "minecraft:" . $identifier, new CII(CII::CATEGORY_ITEMS));
         }
 

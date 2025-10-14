@@ -2,7 +2,9 @@ emerald_custom:
   name: "Emeraude custom"
   texture: "emerald"
   handEquipped: true
+  maxStack: 1
 emerald_custom_2:
   name: "Emeraude custom 2"
   texture: "emerald"
   handEquipped: false
+  maxStack: 35
